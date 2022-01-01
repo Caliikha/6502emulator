@@ -4,9 +4,9 @@
 #include "../Memory/RAM.hpp"
 
 template <const uint16_t Size = 256> // default stack size of 256 Bytes
-struct Stacks {
+struct Stack {
     bit16_t Stack_Pointer;
     constexpr static const bit16_t StackLimit = 0xFFFF - Size;
 
-    Stacks(const bit16_t& pre_set = 0xFFFF) : Stack_Pointer(pre_set) {}
+    Stack(const bit16_t& pre_set = 0xFFFF) : Stack_Pointer(pre_set) {}
 };
