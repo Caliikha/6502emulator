@@ -6,5 +6,5 @@ struct Registers {
     bit8_t IRX;
     bit8_t IRY;
 
-    Registers(bit8_t A, bit8_t X, bit8_t Y) : Accumulator(A), IRX(X), IRY(Y) {}
+    Registers(bit8_t A = 0x00, bit8_t X = 0x00, bit8_t Y = 0x00) : Accumulator(A), IRX(X), IRY(Y) {}
 };

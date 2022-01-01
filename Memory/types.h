@@ -1,4 +1,8 @@
 #pragma once
+
+#define LOW 0
+#define HIGH 0
+
 using bit = bool;
 using bit8_t = unsigned char;
 using bit16_t = unsigned short;
