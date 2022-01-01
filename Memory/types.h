@@ -1,11 +1,11 @@
 #pragma once
 
-#define LOW 0
-#define HIGH 0
+#define LOW 0 // bit data
+#define HIGH 1
 
-using bit = bool;
-using bit8_t = unsigned char;
-using bit16_t = unsigned short;
-using bit32_t = bit8_t[3];
-using bit64_t = bit8_t[4];
-using bit128_t = bit8_t[5];
+using bit = bool; // 1 bit
+using bit8_t = unsigned char; // 1 Byte = 8 bits
+using bit16_t = unsigned short; // 2 Bytes = 16 bits
+using bit32_t = bit8_t[3]; // 3 Bytes = 32 bits
+using bit64_t = bit8_t[4]; // 4 Bytes = 64 bits
+using bit128_t = bit8_t[5]; // 5 Bytes = 128 bits
