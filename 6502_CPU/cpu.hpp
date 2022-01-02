@@ -69,7 +69,7 @@ public:
 
     void Run() {
         printf("Line\tAddress\tHex\tCode\tLabel\tInstruction\tA IRX IRY\tPC\tSP\n");
-        for (int i = 0; i < Memory_Size - 1; i++){
+        for (int i = 0; i < (Memory_Size - 1)/2; i++){
             switch (Load_Opcode()) { // first byte read is the opcode instruction
                 case LDA_im:
                 {
