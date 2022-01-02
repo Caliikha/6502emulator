@@ -7,13 +7,16 @@
 #include "../Memory/stack.hpp"
 
 
-template <const uint32_t Memory_Size = 64*1024, const uint16_t Stack_Size = 256>
+template <
+const uint32_t Memory_Size = 64*1024, // Memory Size first input
+const uint16_t Stack_Size = (256/(64*1024))*Memory_Size // Stack Size second input
+>
 class CPU 
-    : public RAM<Memory_Size>  // default 64kB of memory for the 6502
-    , public Stack<Stack_Size> // default 256 Bytes for the stack
-    , public Counters
-    , public Registers
-    , public Status_Flags
+    : public RAM<Memory_Size>,  // default 64kB of memory for the 6502
+      public Stack<Stack_Size>, // default 256 Bytes for the stack
+      public Counters,
+      public Registers,
+      public Status_Flags
 {
 protected:
     uint32_t Clock_Cycles; // set to same type as RAM max cap
@@ -26,11 +29,11 @@ public:
       , const Status_Flags& pre_flag = Status_Flags{LOW,LOW,LOW,LOW,LOW,LOW,LOW}
       ) 
         : 
-          RAM<Memory_Size>(mem)
-        , Stack<Stack_Size>(pre_stack)
-        , Counters(pre_counter)
-        , Registers(pre_reg)
-        , Status_Flags(pre_flag)
+          RAM<Memory_Size>(mem),
+          Stack<Stack_Size>(pre_stack),
+          Counters(pre_counter),
+          Registers(pre_reg),
+          Status_Flags(pre_flag)
     {
         Clock_Cycles = 0;
     }
