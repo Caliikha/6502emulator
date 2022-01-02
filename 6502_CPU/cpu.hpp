@@ -1,10 +1,12 @@
 #pragma once
 #include "../Memory/types.h"
-#include "../Memory/RAM.hpp"
-#include "../Memory/counters.hpp"
 #include "../Flags/flags.hpp"
-#include "../Registers/registers.hpp"
+#include "../Instructions/instructions.hpp"
+#include "../Instructions/opcodes.h"
+#include "../Memory/counters.hpp"
+#include "../Memory/RAM.hpp"
 #include "../Memory/stack.hpp"
+#include "../Registers/registers.hpp"
 
 
 template <
@@ -16,7 +18,8 @@ class CPU
       public Stack<Stack_Size>, // default 256 Bytes for the stack
       public Counters,
       public Registers,
-      public Status_Flags
+      public Status_Flags,
+      public Instructions
 {
 protected:
     uint32_t Clock_Cycles; // set to same type as RAM max cap
@@ -41,11 +44,46 @@ public:
     mem_data& Load_Data() {
         return this->Memory[Program_Counter++];
     }
-
-    bit16_t Load_Opcode() {
-        return (Load_Data() << 8) + Load_Data();
+    
+    mem_data& Load_Data_At(const bit8_t& address) {
+        return this->Memory[address];
     }
 
-    void LDA();
+    bit8_t& Load_Opcode() {
+        return Load_Data();
+    }
 
+    void Run() {
+        for (int i = 0; i < Memory_Size; i++){
+            switch (Load_Opcode()) { // first byte read is the opcode instruction
+                case LDA_im:
+                {
+                    Registers::Accumulator = Load_Data();
+                    Status_Flags::Zero_Flag = (Registers::Accumulator == 0);
+                    Status_Flags::Negative_Flag = (Registers::Accumulator >= 0b10000000);
+                    Clock_Cycles += 2;
+                    break;
+                }
+                case LDA_ZP:
+                {
+                    Registers::Accumulator = Load_Data_At(Load_Data());
+                    Status_Flags::Zero_Flag = (Registers::Accumulator == 0);
+                    Status_Flags::Negative_Flag = (Registers::Accumulator >= 0b10000000);
+                    Clock_Cycles += 3;
+                    break;
+                }
+                case LDA_ZPX:
+                {
+                    Registers::Accumulator = Load_Data_At(Load_Data() + Registers::IRX);
+                    Status_Flags::Zero_Flag = (Registers::Accumulator == 0);
+                    Status_Flags::Negative_Flag = (Registers::Accumulator >= 0b10000000);
+                    Clock_Cycles += 4;
+                    break;
+                }
+                default:
+                {
+                }
+            }
+        }
+    }
 };
