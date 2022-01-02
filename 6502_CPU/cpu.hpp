@@ -41,15 +41,19 @@ public:
         Clock_Cycles = 0;
     }
 
-    mem_data& Load_Data() {
+    mem_data& Load_Data() { // loading byte at current position
         return this->Memory[Program_Counter++];
     }
     
-    mem_data& Load_Data_At(const bit8_t& address) {
+    mem_data& Load_Data_At(const bit8_t& address) { // loading byte at defined position
         return this->Memory[address];
     }
 
-    bit8_t& Load_Opcode() {
+    bit16_t& Load_Address(const bit16_t& address) { // loading 2 bytes at defined position further in memory (stack)
+        return (this->Memory[address + 1] << 8) + this->Memory[address]; // little endian format
+    }
+
+    bit8_t& Load_Opcode() { // loading byte at current position meant to be opcode
         return Load_Data();
     }
 
