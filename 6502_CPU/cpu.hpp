@@ -53,8 +53,23 @@ public:
         return Load_Data();
     }
 
+    void Print_Data(const uint32_t& line_num_index, const char* instruction_name) {
+        printf("%d\t\t%x\t%x\t\t%s\t\t%x %x %x\t\t%x\t%x\n",
+                line_num_index,
+                this->Memory[Program_Counter],
+                this->Memory[Program_Counter+1],
+                instruction_name,
+                this->Accumulator,
+                this->IRX,
+                this->IRY,
+                this->Program_Counter,
+                this->Stack_Pointer
+                );
+    }
+
     void Run() {
-        for (int i = 0; i < Memory_Size; i++){
+        printf("Line\tAddress\tHex\tCode\tLabel\tInstruction\tA IRX IRY\tPC\tSP\n");
+        for (int i = 0; i < Memory_Size - 1; i++){
             switch (Load_Opcode()) { // first byte read is the opcode instruction
                 case LDA_im:
                 {
@@ -62,6 +77,7 @@ public:
                     Status_Flags::Zero_Flag = (Registers::Accumulator == 0);
                     Status_Flags::Negative_Flag = (Registers::Accumulator >= 0b10000000);
                     Clock_Cycles += 2;
+                    this->Print_Data(i, "LDA_im");
                     break;
                 }
                 case LDA_ZP:
@@ -70,6 +86,7 @@ public:
                     Status_Flags::Zero_Flag = (Registers::Accumulator == 0);
                     Status_Flags::Negative_Flag = (Registers::Accumulator >= 0b10000000);
                     Clock_Cycles += 3;
+                    this->Print_Data(i, "LDA_ZP");
                     break;
                 }
                 case LDA_ZPX:
@@ -78,6 +95,7 @@ public:
                     Status_Flags::Zero_Flag = (Registers::Accumulator == 0);
                     Status_Flags::Negative_Flag = (Registers::Accumulator >= 0b10000000);
                     Clock_Cycles += 4;
+                    this->Print_Data(i, "LDA_ZPX");
                     break;
                 }
                 default:
@@ -85,5 +103,6 @@ public:
                 }
             }
         }
+        printf("\n");
     }
 };
