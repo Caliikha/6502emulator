@@ -23,6 +23,9 @@ struct RAM {
 
     template <typename type = bit8_t>
     RAM(const std::initializer_list<type>& pre_set) {
-        std::copy(pre_set.begin(), pre_set.end(), Memory);
+        for (int i = 0; i < pre_set.size(); i++){
+            std::cout << i << '\n';
+            Memory[i] = *(pre_set.begin() + i);
+        }
     }
 };
