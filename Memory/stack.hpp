@@ -1,7 +1,7 @@
 #pragma once
 #include <cstdint>
 #include "../Memory/types.h"
-#include "../Memory/ROM.hpp"
+#include "../Memory/RAM.hpp"
 
 template <const uint16_t Size = 256> // default stack size of 256 Bytes
 struct Stack {

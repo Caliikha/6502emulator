@@ -1,7 +1,7 @@
 #pragma once
 #include <stdlib.h>
 #include "types.h"
-#include "ROM.hpp"
+#include "RAM.hpp"
 
 struct Counters {
     bit16_t Program_Counter;

@@ -6,7 +6,7 @@ int main()
 {
     const int ram_size = 4;
     const int stack_size = ram_size*256/(64*1024);
-    ROM<4 >memory = ROM<ram_size>{
+    RAM<4 >memory = RAM<ram_size>{
         0x41, 0xA0, 0x21, 0x32
     };
     Stack<stack_size> stack;
