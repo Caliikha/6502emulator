@@ -11,12 +11,25 @@ namespace Exceptions{
             static_cast<std::string>(err_message) += input += '\n';
         }
 
-        inline constexpr const char* what();
+        inline constexpr const char* what() {
+            return err_message;
+        }
     };
 
-    struct No_File_Located : public Except {
+    class No_File_Located : public Except {
     public:
         No_File_Located(const char* input = "No_File_Located\n") {
+            static_cast<std::string>(err_message) += input += '\n';
+        }
+
+        inline const char* what() {
+            return err_message;
+        }
+    };
+
+    class No_End : public Except {
+    public:
+        No_End(const char* input = ".<end> not located in file\n") {
             static_cast<std::string>(err_message) += input += '\n';
         }
 

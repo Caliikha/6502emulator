@@ -60,21 +60,23 @@ public:
     void Print_Data(const char* instruction_name) {
         static uint32_t line_num = 0;
         printf("%d\t\t%X\t%X\t\t%s\t\t%X\t%X\t%X\t%X\t%X\n",
-                line_num++,
-                this->Memory[Program_Counter],
-                this->Memory[Program_Counter+1],
-                instruction_name,
-                this->Accumulator,
-                this->IRX,
-                this->IRY,
-                this->Program_Counter,
-                this->Stack_Pointer
+                line_num++,                     // Line
+                                                // Address
+                this->Memory[Program_Counter],  // Hex
+                this->Memory[Program_Counter+1],// Code
+                                                // Label
+                instruction_name,               // Instruction
+                this->Accumulator,              // ACC
+                this->IRX,                      // IRX
+                this->IRY,                      // IRY
+                this->Program_Counter,          // PC
+                this->Stack_Pointer             // SP
                 );
     }
 
     void Run() {
         printf("Line\tAddress\tHex\tCode\tLabel\tInstruction\tACC\tIRX\tIRY\tPC\tSP\n");
-        while (Program_Counter <= (Memory_Size - Stack_Size)) { 
+        while (Program_Counter < (Memory_Size - Stack_Size)) {
             switch (Load_Opcode()) { // first byte read is the opcode instruction
                 case LDA_im:
                 {

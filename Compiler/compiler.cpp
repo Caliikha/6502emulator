@@ -55,17 +55,19 @@ void Parser(const int& argc, char** argv) throw() {
                         inputfile >> Loaded_Byte;
                         while (Loaded_Byte[0] != '.') {
                             if (Loaded_Byte[0] == '/') { 
-                                inputfile >> Loaded_Byte; 
-                                inputfile >> Loaded_Byte; 
-                                inputfile >> Loaded_Byte; 
+                                inputfile >> Loaded_Byte;
+                                inputfile >> Loaded_Byte;
+                                inputfile >> Loaded_Byte;
                                 continue; 
                             }
-                            outputfile << "\tEXE " << Loaded_Byte.substr(0, Loaded_Byte.size()-1) << " next ";
+                            outputfile << "\tEXE " << Loaded_Byte.substr(0, Loaded_Byte.find(',')) << " next ";
                             inputfile >> Loaded_Byte;
+                            if (Loaded_Byte[0] == ',') { inputfile >> Loaded_Byte; }
                             outputfile << Loaded_Byte.substr(0, Loaded_Byte.size()-1) << " end\n";
                             inputfile >> Loaded_Byte;
                             lines_read++;
                         }
+                        outputfile << "\tstatic_assert(" << STACK_size << " < " << RAM_size << ", \"Stack size must be less than RAM size\");\n";
                         outputfile << "\tCPU<" << RAM_size << ", " << STACK_size << ">(memory, stack).Run();\n";
                         outputfile << '}';
                     }
