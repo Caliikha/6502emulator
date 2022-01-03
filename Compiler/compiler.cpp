@@ -48,30 +48,51 @@ void Parser(const int& argc, char** argv) throw() {
                 }
                 case '.':
                 {
+                    bool break_flag = false;
                     if (current_line.substr(0,8) == ".<start>") {
                         //inputfile.seekg(lines_read);
                         outputfile << "\tint PC = 0x00;\n";
                         std::string Loaded_Byte;
                         inputfile >> Loaded_Byte;
                         while (Loaded_Byte[0] != '.') {
-                            if (Loaded_Byte[0] == '/') { 
-                                inputfile >> Loaded_Byte;
-                                inputfile >> Loaded_Byte;
-                                inputfile >> Loaded_Byte;
-                                continue; 
+                            if (Loaded_Byte[0] == '/') {
+                                getline(inputfile, current_line);
+                                if (current_line[current_line.find(',') + 1] == ' ' && current_line[current_line.find(',') - 1] == ' ') {
+                                    while (Loaded_Byte.find(';') != std::string::npos) {
+                                        inputfile >> Loaded_Byte;
+                                    }
+                                    //inputfile >> Loaded_Byte;
+                                    //inputfile >> Loaded_Byte;
+                                    //inputfile >> Loaded_Byte;
+                                    inputfile >> Loaded_Byte;
+                                    continue;
+                                }
+                                else { 
+                                    inputfile >> Loaded_Byte;
+                                    inputfile >> Loaded_Byte;
+                                    inputfile >> Loaded_Byte;
+                                    continue;
+                                }
                             }
                             outputfile << "\tEXE " << Loaded_Byte.substr(0, Loaded_Byte.find(',')) << " next ";
                             inputfile >> Loaded_Byte;
                             if (Loaded_Byte[0] == ',') { inputfile >> Loaded_Byte; }
                             outputfile << Loaded_Byte.substr(0, Loaded_Byte.size()-1) << " end\n";
+                            std::string hex_val = Loaded_Byte;
                             inputfile >> Loaded_Byte;
+                            if (Loaded_Byte == hex_val) { break_flag = true; break; }
                             lines_read++;
+                        }
+                        if (break_flag == true) {
+                            break;
                         }
                         outputfile << "\tstatic_assert(" << STACK_size << " < " << RAM_size << ", \"Stack size must be less than RAM size\");\n";
                         outputfile << "\tCPU<" << RAM_size << ", " << STACK_size << ">(memory, stack).Run();\n";
                         outputfile << '}';
                     }
                     else if (current_line.substr(0,6) == ".<end>") {
+                        outputfile << "\tstatic_assert(" << STACK_size << " < " << RAM_size << ", \"Stack size must be less than RAM size\");\n";
+                        outputfile << "\tCPU<" << RAM_size << ", " << STACK_size << ">(memory, stack).Run();\n";
                         outputfile << '}';
                     }
                     break;
