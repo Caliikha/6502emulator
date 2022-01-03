@@ -1,5 +1,5 @@
-@set RAM-size = 65535
-@set STACK-size = 256
+@set RAM.size = 65535
+@set STACK.size = 256
 
 .<start>
 

@@ -57,9 +57,10 @@ public:
         return Load_Data();
     }
 
-    void Print_Data(const uint32_t& line_num_index, const char* instruction_name) {
+    void Print_Data(const char* instruction_name) {
+        static uint32_t line_num = 0;
         printf("%d\t\t%X\t%X\t\t%s\t\t%X\t%X\t%X\t%X\t%X\n",
-                line_num_index,
+                line_num++,
                 this->Memory[Program_Counter],
                 this->Memory[Program_Counter+1],
                 instruction_name,
@@ -73,7 +74,7 @@ public:
 
     void Run() {
         printf("Line\tAddress\tHex\tCode\tLabel\tInstruction\tACC\tIRX\tIRY\tPC\tSP\n");
-        for (int i = 0; i < (Memory_Size); i++){
+        while (Program_Counter <= (Memory_Size - Stack_Size)) { 
             switch (Load_Opcode()) { // first byte read is the opcode instruction
                 case LDA_im:
                 {
@@ -81,7 +82,7 @@ public:
                     Status_Flags::Zero_Flag = (Registers::Accumulator == 0);
                     Status_Flags::Negative_Flag = (Registers::Accumulator >= 0b10000000);
                     Clock_Cycles += 2;
-                    this->Print_Data(i, "LDA_im");
+                    this->Print_Data("LDA_im");
                     break;
                 }
                 case LDA_ZP:
@@ -90,7 +91,7 @@ public:
                     Status_Flags::Zero_Flag = (Registers::Accumulator == 0);
                     Status_Flags::Negative_Flag = (Registers::Accumulator >= 0b10000000);
                     Clock_Cycles += 3;
-                    this->Print_Data(i, "LDA_ZP");
+                    this->Print_Data("LDA_ZP");
                     break;
                 }
                 case LDA_ZPX:
@@ -99,7 +100,7 @@ public:
                     Status_Flags::Zero_Flag = (Registers::Accumulator == 0);
                     Status_Flags::Negative_Flag = (Registers::Accumulator >= 0b10000000);
                     Clock_Cycles += 4;
-                    this->Print_Data(i, "LDA_ZPX");
+                    this->Print_Data("LDA_ZPX");
                     break;
                 }
                 default:

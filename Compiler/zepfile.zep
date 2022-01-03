@@ -1,5 +1,5 @@
-@set RAM-size = 8
-@set STACK-size = 1
+@set RAM.size = 8
+@set STACK.size = 1
 
 .<start>
 

@@ -31,13 +31,13 @@ void Parser(const int& argc, char** argv) throw() {
                 case '@':
                 {
                     if (current_line.substr(0,4) == "@set"){
-                        if (current_line.substr(4, 12) == " RAM-size = "){
+                        if (current_line.substr(4, 12) == " RAM.size = "){
                             std::string temp_str;
                             temp_str = current_line.substr(current_line.find("=") + 2, current_line.size() - 16);
                             RAM_size = stoi(temp_str);
                             outputfile << "\tRAM<" << RAM_size << "> memory;\n";
                         }
-                        else if (current_line.substr(4,14) == " STACK-size = "){
+                        else if (current_line.substr(4,14) == " STACK.size = "){
                             std::string temp_str;
                             temp_str = current_line.substr(current_line.find("=") + 2, current_line.size() - 18);
                             STACK_size = stoi(temp_str);
