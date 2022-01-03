@@ -20,7 +20,7 @@ namespace Exceptions{
             static_cast<std::string>(err_message) += input += '\n';
         }
 
-        inline constexpr const char* what() {
+        inline const char* what() {
             return err_message;
         }
     };
