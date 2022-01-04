@@ -50,6 +50,7 @@ void Parser(const int& argc, char** argv) throw() {
                 {
                     bool break_flag = false;
                     if (current_line.substr(0,8) == ".<start>") {
+                        bool var_found_flag = false;
                         //inputfile.seekg(lines_read);
                         outputfile << "\tint PC = 0x00;\n";
                         std::string Loaded_Byte;
@@ -74,14 +75,49 @@ void Parser(const int& argc, char** argv) throw() {
                                     continue;
                                 }
                             }
-                            outputfile << "\tEXE " << Loaded_Byte.substr(0, Loaded_Byte.find(',')) << " next ";
-                            inputfile >> Loaded_Byte;
-                            if (Loaded_Byte[0] == ',') { inputfile >> Loaded_Byte; }
-                            outputfile << Loaded_Byte.substr(0, Loaded_Byte.size()-1) << " end\n";
-                            std::string hex_val = Loaded_Byte;
-                            inputfile >> Loaded_Byte;
-                            if (Loaded_Byte == hex_val) { break_flag = true; break; }
-                            lines_read++;
+                            else if (Loaded_Byte == "var") {
+                                var_found_flag = true;
+                                //getline(inputfile, current_line);
+                                if (current_line[current_line.find(',') + 1] == ' ' && current_line[current_line.find(',') - 1] == ' ') {
+                                    inputfile >> Loaded_Byte;
+                                    outputfile << "\tbit8_t " << Loaded_Byte;
+                                    inputfile >> Loaded_Byte;
+                                    inputfile >> Loaded_Byte;
+                                    if (Loaded_Byte[3] == ';') {
+                                        outputfile << " = " << Loaded_Byte.substr(0, 3) << ";\n";
+                                    }
+                                    else {
+                                        outputfile << " = " << Loaded_Byte << ";\n";
+                                    }
+                                }
+                                else {
+                                    std::cout << "FIRST ONE\n";
+                                    inputfile >> Loaded_Byte;
+                                    outputfile << "\tbit8_t " << Loaded_Byte.substr(0, Loaded_Byte.size());
+                                    inputfile >> Loaded_Byte;
+                                    inputfile >> Loaded_Byte;
+                                    if (Loaded_Byte[3] == ';') {
+                                        outputfile << " = " << Loaded_Byte.substr(0, 3) << ";\n";
+                                    }
+                                    else {
+                                        outputfile << " = " << Loaded_Byte << ";\n";
+                                    }
+                                }
+                            }
+                            if (var_found_flag == false) { 
+                                outputfile << "\tEXE " << Loaded_Byte.substr(0, Loaded_Byte.find(',')) << " next ";
+                                inputfile >> Loaded_Byte;
+                                if (Loaded_Byte[0] == ',') { inputfile >> Loaded_Byte; }
+                                outputfile << Loaded_Byte.substr(0, Loaded_Byte.size()-1) << " end\n";
+                                std::string hex_val = Loaded_Byte;
+                                inputfile >> Loaded_Byte;
+                                if (Loaded_Byte == hex_val) { break_flag = true; break; }
+                                lines_read++;
+                            }
+                            else {
+                                var_found_flag = false;
+                                inputfile >> Loaded_Byte;
+                            }
                         }
                         if (break_flag == true) {
                             break;

@@ -18,8 +18,8 @@ class CPU
       public Stack<Stack_Size>, // default 256 Bytes for the stack
       public Counters,
       public Registers,
-      public Status_Flags,
-      public Instructions
+      public Status_Flags
+      //public Instructions
 {
 protected:
     uint32_t Clock_Cycles; // set to same type as RAM max cap
@@ -105,6 +105,15 @@ public:
                     this->Print_Data("LDA_ZPX");
                     break;
                 }
+//                case LDA_abs:
+//                {
+//                    Registers::Accumulator = (Load_Data_At(Program_Counter + 1) << 8) + Load_Data();
+//                    Status_Flags::Zero_Flag = (Registers::Accumulator == 0);
+//                    Status_Flags::Negative_Flag = (Registers::Accumulator >= 0b10000000);
+//                    Clock_Cycles += 4;
+//                    this->Print_Data("LDA_abs");
+//                    break;
+//                }
                 default:
                 {
                 }

@@ -3,10 +3,12 @@
 
 .<start>
 
-    LDA_im, $42;
-    LDA_ZP, $03;
-    LDA_im, $41;
-    LDA_ZPX, $03;
+var number  , $92;
+    LDA_im  , number;
+    LDA_ZP  , $03;
+    LDA_im  , $41;
+    LDA_ZPX , $03;
+    LDA_im  , $31;
 
 .<end>
 
